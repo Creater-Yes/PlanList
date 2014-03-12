@@ -1,29 +1,25 @@
 //
-//  MainViewController.m
+//  ItemsOfPlanListViewController.m
 //  PlanList
 //
 //  Created by dingql on 14-3-12.
 //  Copyright (c) 2014年 dingql. All rights reserved.
 //
 
-#import "MainViewController.h"
-#import "DataModel.h"
-#import "PlanList.h"
 #import "ItemsOfPlanListViewController.h"
-#import "PlanListItem.h"
+#import "PlanList.h"
 
-
-@interface MainViewController ()
+@interface ItemsOfPlanListViewController () <UITextFieldDelegate>
 
 @end
 
-@implementation MainViewController
+@implementation ItemsOfPlanListViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.data = [[DataModel alloc] init];
+        
     }
     return self;
 }
@@ -32,14 +28,25 @@
 {
     [super viewDidLoad];
 
-    self.title = @"PlanList";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddItemsToPlanList)];
+    if (_list.items == nil) {
+        self.title = @"Add PlanList";
+    }
+    else{
+        self.title = @"Edit PlanList";
+    }
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddPlanList)];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CancelPlanList)];
 }
 
-- (void)AddItemsToPlanList
+- (void)AddPlanList
 {
-    ItemsOfPlanListViewController * itemsOfPlanList = [[ItemsOfPlanListViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
+}
+
+- (void)CancelPlanList
+{
     
 }
 
@@ -58,37 +65,26 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.lists.count;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *Identifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
-    }
+    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    PlanList * list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
-    cell.imageView.image = [UIImage imageNamed: list.listIconName];
-    cell.textLabel.text = list.listTitle;
+    UITextField * textField = [[UITextField alloc]initWithFrame:CGRectMake(20, 12, 180, 20)];
+    textField.delegate = self;
+    textField.placeholder = @"Enter PlanList name";
+    textField.text = _list.listTitle;
     
-    int count = 0;
-    for (PlanListItem * item in [(PlanList *)_data.lists items]) {
-        if (!item.itemState) {
-            count++;
-        }
-    }
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(20, 12, 50, 20)];
+    label.font = [UIFont boldSystemFontOfSize:18.0f];
+    label.text = @"Icon";
     
-    if ([(PlanList *)_data.lists items].count == 0) {
-        cell.detailTextLabel.text = @"(Empty)";
-    }
-    if (count == 0) {
-        cell.detailTextLabel.text = @"(All done!)";
-    }
-    else{
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"(%d need to do)", count];
-    }
+    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(250, 2, 40, 40)];
+    NSString * iconName = _list.listIconName ? _list.listIconName : @"Folder";
+    imageView.image = [UIImage imageNamed:iconName];
     
     return cell;
 }
