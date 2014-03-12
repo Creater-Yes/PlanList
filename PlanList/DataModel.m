@@ -10,4 +10,13 @@
 
 @implementation DataModel
 
+- (id)init
+{
+    if (self = [super init]) {
+        self.lists = [NSMutableArray array];
+    }
+    
+    return self;
+}
+
 @end

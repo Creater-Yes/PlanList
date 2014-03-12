@@ -1,29 +1,24 @@
 //
-//  MainViewController.m
+//  IconPickerViewController.m
 //  PlanList
 //
 //  Created by dingql on 14-3-12.
 //  Copyright (c) 2014年 dingql. All rights reserved.
 //
 
-#import "MainViewController.h"
-#import "DataModel.h"
-#import "PlanList.h"
-#import "ItemsOfPlanListViewController.h"
-#import "PlanListItem.h"
+#import "IconPickerViewController.h"
 
-
-@interface MainViewController () <ItemsOfPlanListViewControllerDelegate>
-
+@interface IconPickerViewController ()
+@property(nonatomic, strong) NSArray * icons;
 @end
 
-@implementation MainViewController
+@implementation IconPickerViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.data = [[DataModel alloc] init];
+        // Custom initialization
     }
     return self;
 }
@@ -32,17 +27,15 @@
 {
     [super viewDidLoad];
 
-    self.title = @"PlanList";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddItemsToPlanList)];
+    self.title = @"Icon pick";
+    
+    self.icons = @[@"Appointments", @"Birthdays", @"Chores", @"Drinks", @"Folder", @"Groceries",
+                   @"Inbox", @"No Icon", @"Photos", @"Trips"];
 }
 
-- (void)AddItemsToPlanList
+- (void)IconPickCancel
 {
-    ItemsOfPlanListViewController * itemsOfPlanList = [[ItemsOfPlanListViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    itemsOfPlanList.delegate = self;
-    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsOfPlanList];
-    
-    [self presentViewController:nav animated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,7 +53,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.lists.count;
+    return _icons.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -68,50 +61,19 @@
     static NSString *Identifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
     }
     
-    PlanList * list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
-    cell.imageView.image = [UIImage imageNamed: list.listIconName];
-    cell.textLabel.text = list.listTitle;
-    
-    int count = 0;
-    for (PlanListItem * item in [(PlanList *)[_data.lists objectAtIndex:indexPath.row] items]) {
-        if (!item.itemState) {
-            count++;
-        }
-    }
-    
-    if ([(PlanList *)[_data.lists objectAtIndex:].count == 0) {
-        cell.detailTextLabel.text = @"(Empty)";
-    }
-    if (count == 0) {
-        cell.detailTextLabel.text = @"(All done!)";
-    }
-    else{
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"(%d need to do)", count];
-    }
-    
+    cell.imageView.image = [UIImage imageNamed:[_icons objectAtIndex:indexPath.row]];
+    cell.textLabel.text = [_icons objectAtIndex:indexPath.row];
     return cell;
 }
 
-#pragma mark - ItemsOfPlanListViewController Delegate
-
-- (void)ItemsOfPlanListController:(ItemsOfPlanListViewController *)controller didFinishAddPlanList:(PlanList *)list
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.data.lists insertObject:list atIndex:0];
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-    [self.tableView reloadData];
-}
-
-- (void)ItemsOfPlanListController:(ItemsOfPlanListViewController *)controller didFinishEditPlanList:(PlanList *)list
-{
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)ItemsOfPlanListControllerDidCancel:(ItemsOfPlanListViewController *)controller
-{
-    [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [self.delegate IconPickerViewController:self DidFinishPickIcon:[_icons objectAtIndex:indexPath.row]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /*

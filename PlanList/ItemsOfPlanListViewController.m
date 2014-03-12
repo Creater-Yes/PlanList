@@ -8,8 +8,9 @@
 
 #import "ItemsOfPlanListViewController.h"
 #import "PlanList.h"
+#import "IconPickerViewController.h"
 
-@interface ItemsOfPlanListViewController () <UITextFieldDelegate>
+@interface ItemsOfPlanListViewController () <UITextFieldDelegate, IconPickerViewControllerDelegate>
 
 @end
 
@@ -19,41 +20,78 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        
+
     }
     return self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    UITextField * textField = (UITextField *)[self.tableView viewWithTag:1000];
+    [textField becomeFirstResponder];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(AddPlanList)];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(CancelPlanList)];
 
     if (_list.items == nil) {
         self.title = @"Add PlanList";
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else{
         self.title = @"Edit PlanList";
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddPlanList)];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CancelPlanList)];
 }
 
+#pragma mark - Target -- Action
 - (void)AddPlanList
 {
-    
+    if (self.list == nil) {
+        self.list = [[PlanList alloc]init];
+    }
+    UITextField * textField = (UITextField *)[self.tableView viewWithTag:1000];
+    _list.listTitle = textField.text;
+    [self.delegate ItemsOfPlanListController:self didFinishAddPlanList:_list];
 }
 
 - (void)CancelPlanList
 {
-    
+    [self.delegate ItemsOfPlanListControllerDidCancel:self];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - textField Delegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString * str = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    self.navigationItem.rightBarButtonItem.enabled = str.length > 0;
+    
+    return YES;
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -71,22 +109,57 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UITextField * textField = [[UITextField alloc]initWithFrame:CGRectMake(20, 12, 180, 20)];
-    textField.delegate = self;
-    textField.placeholder = @"Enter PlanList name";
-    textField.text = _list.listTitle;
+    if (indexPath.row == 0) {
+        
+        UITextField * textField = [[UITextField alloc]initWithFrame:CGRectMake(20, 12, 180, 20)];
+        textField.tag = 1000;
+        textField.delegate = self;
+        textField.placeholder = @"Enter PlanList name";
+        textField.text = _list.listTitle;
+        textField.returnKeyType = UIReturnKeyDone;
+        [cell.contentView addSubview:textField];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    else if (indexPath.row == 1){
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(20, 12, 50, 20)];
+        label.font = [UIFont boldSystemFontOfSize:18.0f];
+        label.text = @"Icon";
+        
+        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(250, 2, 40, 40)];
+        NSString * iconName = _list.listIconName ? _list.listIconName : @"Folder";
+        imageView.image = [UIImage imageNamed:iconName];
+        
+        [cell.contentView addSubview:label];
+        [cell.contentView addSubview:imageView];
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    }
     
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(20, 12, 50, 20)];
-    label.font = [UIFont boldSystemFontOfSize:18.0f];
-    label.text = @"Icon";
-    
-    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(250, 2, 40, 40)];
-    NSString * iconName = _list.listIconName ? _list.listIconName : @"Folder";
-    imageView.image = [UIImage imageNamed:iconName];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 1) {
+        IconPickerViewController * iconPicker = [[IconPickerViewController alloc]initWithStyle:UITableViewStylePlain];
+        iconPicker.delegate = self;
+        
+        [self.navigationController pushViewController:iconPicker animated:YES];
+        
+    }
+}
+
+- (void)IconPickerViewController:(IconPickerViewController *)controller DidFinishPickIcon:(NSString *)iconName
+{
+    if (_list == nil) {
+        self.list = [[PlanList alloc]init];
+    }
+    self.list.listIconName = iconName;
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 /*
