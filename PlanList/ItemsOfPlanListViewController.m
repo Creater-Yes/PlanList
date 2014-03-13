@@ -11,7 +11,7 @@
 #import "IconPickerViewController.h"
 
 @interface ItemsOfPlanListViewController () <UITextFieldDelegate, IconPickerViewControllerDelegate>
-
+@property(nonatomic, copy) NSString * iconPicked;
 @end
 
 @implementation ItemsOfPlanListViewController
@@ -38,7 +38,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(CancelPlanList)];
 
-    if (_list.items == nil) {
+    if (_list == nil) {
         self.title = @"Add PlanList";
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
@@ -52,12 +52,18 @@
 #pragma mark - Target -- Action
 - (void)AddPlanList
 {
-    if (self.list == nil) {
-        self.list = [[PlanList alloc]init];
-    }
     UITextField * textField = (UITextField *)[self.tableView viewWithTag:1000];
-    _list.listTitle = textField.text;
-    [self.delegate ItemsOfPlanListController:self didFinishAddPlanList:_list];
+    if (_list == nil) {
+        self.list = [[PlanList alloc]init];
+        _list.listTitle = textField.text;
+        _list.listIconName = _iconPicked;
+        [self.delegate ItemsOfPlanListController:self didFinishAddPlanList:_list];
+
+    }
+    else{
+        self.list.listTitle = textField.text;
+        [self.delegate ItemsOfPlanListController:self didFinishEditPlanList:_list];
+    }
 }
 
 - (void)CancelPlanList
@@ -154,10 +160,7 @@
 
 - (void)IconPickerViewController:(IconPickerViewController *)controller DidFinishPickIcon:(NSString *)iconName
 {
-    if (_list == nil) {
-        self.list = [[PlanList alloc]init];
-    }
-    self.list.listIconName = iconName;
+    self.iconPicked = iconName;
     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }

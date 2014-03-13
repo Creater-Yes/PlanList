@@ -70,22 +70,22 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
     }
-    
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     PlanList * list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
     cell.imageView.image = [UIImage imageNamed: list.listIconName];
     cell.textLabel.text = list.listTitle;
     
     int count = 0;
-    for (PlanListItem * item in [(PlanList *)[_data.lists objectAtIndex:indexPath.row] items]) {
+    for (PlanListItem * item in list.items) {
         if (!item.itemState) {
             count++;
         }
     }
     
-    if ([(PlanList *)[_data.lists objectAtIndex:].count == 0) {
+    if (list.items.count == 0) {
         cell.detailTextLabel.text = @"(Empty)";
     }
-    if (count == 0) {
+    else if (count == 0) {
         cell.detailTextLabel.text = @"(All done!)";
     }
     else{
@@ -93,6 +93,22 @@
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    ItemsOfPlanListViewController * itemsController = [[ItemsOfPlanListViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    itemsController.delegate = self;
+    itemsController.list = [_data.lists objectAtIndex:indexPath.row];
+    
+    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsController];
+    
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 #pragma mark - ItemsOfPlanListViewController Delegate
@@ -106,6 +122,8 @@
 
 - (void)ItemsOfPlanListController:(ItemsOfPlanListViewController *)controller didFinishEditPlanList:(PlanList *)list
 {
+    NSInteger index = [self.data.lists indexOfObject:list];
+    [self.data.lists replaceObjectAtIndex:index withObject:list];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
