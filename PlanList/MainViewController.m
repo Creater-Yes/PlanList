@@ -11,6 +11,7 @@
 #import "PlanList.h"
 #import "ListsOfPlanListViewController.h"
 #import "PlanListItem.h"
+#import "DetailListViewController.h"
 
 
 @interface MainViewController () <ListsOfPlanListViewControllerDelegate>
@@ -33,10 +34,10 @@
     [super viewDidLoad];
 
     self.title = @"PlanList";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddItemsToPlanList)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
 }
 
-- (void)AddItemsToPlanList
+- (void)AddlistToPlanList
 {
     ListsOfPlanListViewController * listsOfPlanList = [[ListsOfPlanListViewController alloc] initWithStyle:UITableViewStyleGrouped];
     listsOfPlanList.delegate = self;
@@ -108,6 +109,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    DetailListViewController * detailController = [[DetailListViewController alloc]initWithStyle:UITableViewStylePlain];
+    detailController.list = [_data.lists objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:detailController animated:YES];
     
 }
 

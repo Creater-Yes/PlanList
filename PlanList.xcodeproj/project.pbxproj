@@ -43,6 +43,8 @@
 		2263CE7418D0AF69004A6F5E /* Photos@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2263CE6018D0AF69004A6F5E /* Photos@2x.png */; };
 		2263CE7518D0AF69004A6F5E /* Trips.png in Resources */ = {isa = PBXBuildFile; fileRef = 2263CE6118D0AF69004A6F5E /* Trips.png */; };
 		2263CE7618D0AF69004A6F5E /* Trips@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2263CE6218D0AF69004A6F5E /* Trips@2x.png */; };
+		226A587D18D15AB90072E7D1 /* DetailListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226A587C18D15AB90072E7D1 /* DetailListViewController.m */; };
+		226A588018D165310072E7D1 /* ItemsInDetailListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226A587F18D165310072E7D1 /* ItemsInDetailListViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,10 @@
 		2263CE6018D0AF69004A6F5E /* Photos@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Photos@2x.png"; sourceTree = "<group>"; };
 		2263CE6118D0AF69004A6F5E /* Trips.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Trips.png; sourceTree = "<group>"; };
 		2263CE6218D0AF69004A6F5E /* Trips@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Trips@2x.png"; sourceTree = "<group>"; };
+		226A587B18D15AB90072E7D1 /* DetailListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailListViewController.h; sourceTree = "<group>"; };
+		226A587C18D15AB90072E7D1 /* DetailListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailListViewController.m; sourceTree = "<group>"; };
+		226A587E18D165310072E7D1 /* ItemsInDetailListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemsInDetailListViewController.h; sourceTree = "<group>"; };
+		226A587F18D165310072E7D1 /* ItemsInDetailListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemsInDetailListViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +173,10 @@
 				2263CE4618D06A3D004A6F5E /* ListsOfPlanListViewController.m */,
 				2263CE4B18D08E6F004A6F5E /* IconPickerViewController.h */,
 				2263CE4C18D08E6F004A6F5E /* IconPickerViewController.m */,
+				226A587B18D15AB90072E7D1 /* DetailListViewController.h */,
+				226A587C18D15AB90072E7D1 /* DetailListViewController.m */,
+				226A587E18D165310072E7D1 /* ItemsInDetailListViewController.h */,
+				226A587F18D165310072E7D1 /* ItemsInDetailListViewController.m */,
 				2263CE4818D06B9B004A6F5E /* PlanList.h */,
 				2263CE4918D06B9B004A6F5E /* PlanList.m */,
 				2263CE4218D0657B004A6F5E /* PlanListItem.h */,
@@ -333,11 +343,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2263CE1E18D05FD8004A6F5E /* AppDelegate.m in Sources */,
+				226A588018D165310072E7D1 /* ItemsInDetailListViewController.m in Sources */,
 				2263CE4118D06226004A6F5E /* DataModel.m in Sources */,
 				2263CE4418D0657B004A6F5E /* PlanListItem.m in Sources */,
 				2263CE4D18D08E6F004A6F5E /* IconPickerViewController.m in Sources */,
 				2263CE3E18D06078004A6F5E /* MainViewController.m in Sources */,
 				2263CE1A18D05FD8004A6F5E /* main.m in Sources */,
+				226A587D18D15AB90072E7D1 /* DetailListViewController.m in Sources */,
 				2263CE4718D06A3D004A6F5E /* ListsOfPlanListViewController.m in Sources */,
 				2263CE4A18D06B9B004A6F5E /* PlanList.m in Sources */,
 			);
