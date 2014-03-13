@@ -124,6 +124,8 @@
 {
     NSInteger index = [self.data.lists indexOfObject:list];
     [self.data.lists replaceObjectAtIndex:index withObject:list];
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

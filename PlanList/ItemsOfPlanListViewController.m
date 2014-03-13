@@ -44,6 +44,7 @@
     }
     else{
         self.title = @"Edit PlanList";
+        self.iconPicked = _list.listIconName;
     }
     
     
@@ -62,6 +63,7 @@
     }
     else{
         self.list.listTitle = textField.text;
+        self.list.listIconName = _iconPicked;
         [self.delegate ItemsOfPlanListController:self didFinishEditPlanList:_list];
     }
 }
@@ -135,7 +137,7 @@
         label.text = @"Icon";
         
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(250, 2, 40, 40)];
-        NSString * iconName = _list.listIconName ? _list.listIconName : @"Folder";
+        NSString * iconName = _iconPicked ? _iconPicked : @"Folder";
         imageView.image = [UIImage imageNamed:iconName];
         
         [cell.contentView addSubview:label];
