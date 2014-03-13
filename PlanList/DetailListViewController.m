@@ -9,6 +9,7 @@
 #import "DetailListViewController.h"
 #import "PlanList.h"
 #import "ItemsInDetailListViewController.h"
+#import "PlanListItem.h"
 
 @interface DetailListViewController () <ItemsInDetailListViewControllerDelegate>
 
@@ -64,23 +65,76 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *Identifier = @"Cell";
+    UILabel * label = nil;
+    UILabel * titleLabel = nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier];
+        
+        label = [[UILabel alloc]initWithFrame:CGRectMake(10, 12, 10, 20)];
+        label.tag = 1050;
+        label.font = [UIFont boldSystemFontOfSize:15.0f];
+        titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(30, 12, 50, 20)];
+        titleLabel.tag = 1051;
+        [cell.contentView addSubview:label];
+        [cell.contentView addSubview:titleLabel];
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    }
     
-    // Configure the cell...
+    PlanListItem * item = [_list.items objectAtIndex:indexPath.row];
+    
+    label = (UILabel *)[cell.contentView viewWithTag:1050];
+    label.text = item.itemState ? @"√" : @"";
+    
+    titleLabel = (UILabel *)[cell.contentView viewWithTag:1051];
+    titleLabel.text = item.itemName;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    ItemsInDetailListViewController * itemsController = [[ItemsInDetailListViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    itemsController.delegate = self;
+    itemsController.item = [_list.items objectAtIndex:indexPath.row];
+    
+    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsController];
+    
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    PlanListItem * item = [_list.items objectAtIndex:indexPath.row];
+    item.itemState = !item.itemState;
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [_list.items removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - ItemsInDetailListViewController Delegate
 
 - (void)ItemsController:(ItemsInDetailListViewController *)controller didFinishAddItem:(PlanListItem *)item
 {
+    [self.list.items insertObject:item atIndex:0];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
 }
 
 - (void)ItemsController:(ItemsInDetailListViewController *)controller didFinishEditItem:(PlanListItem *)item
 {
+    NSInteger index = [_list.items indexOfObject:item];
+    //[self.list.items replaceObjectAtIndex:index withObject:item];
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

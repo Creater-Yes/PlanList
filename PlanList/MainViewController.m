@@ -14,7 +14,7 @@
 #import "DetailListViewController.h"
 
 
-@interface MainViewController () <ListsOfPlanListViewControllerDelegate>
+@interface MainViewController () <ListsOfPlanListViewControllerDelegate, UINavigationControllerDelegate>
 
 @end
 
@@ -35,6 +35,7 @@
 
     self.title = @"PlanList";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
+    self.navigationController.delegate = self;
 }
 
 - (void)AddlistToPlanList
@@ -115,6 +116,14 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [_data.lists removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 #pragma mark - ItemsOfPlanListViewController Delegate
 
 - (void)ListsOfPlanListController:(ListsOfPlanListViewController *)controller didFinishAddPlanList:(PlanList *)list
@@ -136,6 +145,15 @@
 - (void)ListsOfPlanListControllerDidCancel:(ListsOfPlanListViewController *)controller
 {
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UINavigationController Delegate
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == self) {
+        [self.tableView reloadData];
+    }
 }
 
 /*
