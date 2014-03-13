@@ -6,15 +6,15 @@
 //  Copyright (c) 2014年 dingql. All rights reserved.
 //
 
-#import "ItemsOfPlanListViewController.h"
+#import "ListsOfPlanListViewController.h"
 #import "PlanList.h"
 #import "IconPickerViewController.h"
 
-@interface ItemsOfPlanListViewController () <UITextFieldDelegate, IconPickerViewControllerDelegate>
+@interface ListsOfPlanListViewController () <UITextFieldDelegate, IconPickerViewControllerDelegate>
 @property(nonatomic, copy) NSString * iconPicked;
 @end
 
-@implementation ItemsOfPlanListViewController
+@implementation ListsOfPlanListViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -58,19 +58,19 @@
         self.list = [[PlanList alloc]init];
         _list.listTitle = textField.text;
         _list.listIconName = _iconPicked;
-        [self.delegate ItemsOfPlanListController:self didFinishAddPlanList:_list];
+        [self.delegate ListsOfPlanListController:self didFinishAddPlanList:_list];
 
     }
     else{
         self.list.listTitle = textField.text;
         self.list.listIconName = _iconPicked;
-        [self.delegate ItemsOfPlanListController:self didFinishEditPlanList:_list];
+        [self.delegate ListsOfPlanListController:self didFinishEditPlanList:_list];
     }
 }
 
 - (void)CancelPlanList
 {
-    [self.delegate ItemsOfPlanListControllerDidCancel:self];
+    [self.delegate ListsOfPlanListControllerDidCancel:self];
 }
 
 - (void)didReceiveMemoryWarning

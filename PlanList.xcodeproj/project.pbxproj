@@ -20,7 +20,7 @@
 		2263CE3E18D06078004A6F5E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE3D18D06078004A6F5E /* MainViewController.m */; };
 		2263CE4118D06226004A6F5E /* DataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4018D06226004A6F5E /* DataModel.m */; };
 		2263CE4418D0657B004A6F5E /* PlanListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4318D0657B004A6F5E /* PlanListItem.m */; };
-		2263CE4718D06A3D004A6F5E /* ItemsOfPlanListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4618D06A3D004A6F5E /* ItemsOfPlanListViewController.m */; };
+		2263CE4718D06A3D004A6F5E /* ListsOfPlanListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4618D06A3D004A6F5E /* ListsOfPlanListViewController.m */; };
 		2263CE4A18D06B9B004A6F5E /* PlanList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4918D06B9B004A6F5E /* PlanList.m */; };
 		2263CE4D18D08E6F004A6F5E /* IconPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2263CE4C18D08E6F004A6F5E /* IconPickerViewController.m */; };
 		2263CE6318D0AF69004A6F5E /* Appointments.png in Resources */ = {isa = PBXBuildFile; fileRef = 2263CE4F18D0AF69004A6F5E /* Appointments.png */; };
@@ -75,8 +75,8 @@
 		2263CE4018D06226004A6F5E /* DataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModel.m; sourceTree = "<group>"; };
 		2263CE4218D0657B004A6F5E /* PlanListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanListItem.h; sourceTree = "<group>"; };
 		2263CE4318D0657B004A6F5E /* PlanListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlanListItem.m; sourceTree = "<group>"; };
-		2263CE4518D06A3D004A6F5E /* ItemsOfPlanListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemsOfPlanListViewController.h; sourceTree = "<group>"; };
-		2263CE4618D06A3D004A6F5E /* ItemsOfPlanListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemsOfPlanListViewController.m; sourceTree = "<group>"; };
+		2263CE4518D06A3D004A6F5E /* ListsOfPlanListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListsOfPlanListViewController.h; sourceTree = "<group>"; };
+		2263CE4618D06A3D004A6F5E /* ListsOfPlanListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListsOfPlanListViewController.m; sourceTree = "<group>"; };
 		2263CE4818D06B9B004A6F5E /* PlanList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanList.h; sourceTree = "<group>"; };
 		2263CE4918D06B9B004A6F5E /* PlanList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlanList.m; sourceTree = "<group>"; };
 		2263CE4B18D08E6F004A6F5E /* IconPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconPickerViewController.h; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 				2263CE1D18D05FD8004A6F5E /* AppDelegate.m */,
 				2263CE3C18D06078004A6F5E /* MainViewController.h */,
 				2263CE3D18D06078004A6F5E /* MainViewController.m */,
-				2263CE4518D06A3D004A6F5E /* ItemsOfPlanListViewController.h */,
-				2263CE4618D06A3D004A6F5E /* ItemsOfPlanListViewController.m */,
+				2263CE4518D06A3D004A6F5E /* ListsOfPlanListViewController.h */,
+				2263CE4618D06A3D004A6F5E /* ListsOfPlanListViewController.m */,
 				2263CE4B18D08E6F004A6F5E /* IconPickerViewController.h */,
 				2263CE4C18D08E6F004A6F5E /* IconPickerViewController.m */,
 				2263CE4818D06B9B004A6F5E /* PlanList.h */,
@@ -338,7 +338,7 @@
 				2263CE4D18D08E6F004A6F5E /* IconPickerViewController.m in Sources */,
 				2263CE3E18D06078004A6F5E /* MainViewController.m in Sources */,
 				2263CE1A18D05FD8004A6F5E /* main.m in Sources */,
-				2263CE4718D06A3D004A6F5E /* ItemsOfPlanListViewController.m in Sources */,
+				2263CE4718D06A3D004A6F5E /* ListsOfPlanListViewController.m in Sources */,
 				2263CE4A18D06B9B004A6F5E /* PlanList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,6 +531,7 @@
 				2263CE3818D05FD9004A6F5E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2263CE3918D05FD9004A6F5E /* Build configuration list for PBXNativeTarget "PlanListTests" */ = {
 			isa = XCConfigurationList;
@@ -539,6 +540,7 @@
 				2263CE3B18D05FD9004A6F5E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

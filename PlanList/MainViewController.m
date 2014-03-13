@@ -9,11 +9,11 @@
 #import "MainViewController.h"
 #import "DataModel.h"
 #import "PlanList.h"
-#import "ItemsOfPlanListViewController.h"
+#import "ListsOfPlanListViewController.h"
 #import "PlanListItem.h"
 
 
-@interface MainViewController () <ItemsOfPlanListViewControllerDelegate>
+@interface MainViewController () <ListsOfPlanListViewControllerDelegate>
 
 @end
 
@@ -38,9 +38,9 @@
 
 - (void)AddItemsToPlanList
 {
-    ItemsOfPlanListViewController * itemsOfPlanList = [[ItemsOfPlanListViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    itemsOfPlanList.delegate = self;
-    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsOfPlanList];
+    ListsOfPlanListViewController * listsOfPlanList = [[ListsOfPlanListViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    listsOfPlanList.delegate = self;
+    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:listsOfPlanList];
     
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -97,11 +97,11 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    ItemsOfPlanListViewController * itemsController = [[ItemsOfPlanListViewController alloc]initWithStyle:UITableViewStyleGrouped];
-    itemsController.delegate = self;
-    itemsController.list = [_data.lists objectAtIndex:indexPath.row];
+    ListsOfPlanListViewController * listsController = [[ListsOfPlanListViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    listsController.delegate = self;
+    listsController.list = [_data.lists objectAtIndex:indexPath.row];
     
-    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsController];
+    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:listsController];
     
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -113,14 +113,14 @@
 
 #pragma mark - ItemsOfPlanListViewController Delegate
 
-- (void)ItemsOfPlanListController:(ItemsOfPlanListViewController *)controller didFinishAddPlanList:(PlanList *)list
+- (void)ListsOfPlanListController:(ListsOfPlanListViewController *)controller didFinishAddPlanList:(PlanList *)list
 {
     [self.data.lists insertObject:list atIndex:0];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
     [self.tableView reloadData];
 }
 
-- (void)ItemsOfPlanListController:(ItemsOfPlanListViewController *)controller didFinishEditPlanList:(PlanList *)list
+- (void)ListsOfPlanListController:(ListsOfPlanListViewController *)controller didFinishEditPlanList:(PlanList *)list
 {
     NSInteger index = [self.data.lists indexOfObject:list];
     [self.data.lists replaceObjectAtIndex:index withObject:list];
@@ -129,7 +129,7 @@
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)ItemsOfPlanListControllerDidCancel:(ItemsOfPlanListViewController *)controller
+- (void)ListsOfPlanListControllerDidCancel:(ListsOfPlanListViewController *)controller
 {
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 }
