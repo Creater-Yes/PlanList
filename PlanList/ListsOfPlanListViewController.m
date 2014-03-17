@@ -20,7 +20,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-
+        self.iconPicked = @"Folder";
     }
     return self;
 }
@@ -137,7 +137,7 @@
         label.text = @"Icon";
         
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(250, 2, 40, 40)];
-        NSString * iconName = _iconPicked ? _iconPicked : @"Folder";
+        NSString * iconName = _iconPicked;
         imageView.image = [UIImage imageNamed:iconName];
         
         [cell.contentView addSubview:label];
