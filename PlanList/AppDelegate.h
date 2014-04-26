@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class DataModel;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) UINavigationController * navigationController;
-
+@property (nonatomic, strong) DataModel * data;
 @end

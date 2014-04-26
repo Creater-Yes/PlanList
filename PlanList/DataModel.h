@@ -10,4 +10,8 @@
 
 @interface DataModel : NSObject
 @property(nonatomic, strong) NSMutableArray * lists;
+
+- (void)saveData;
+
+- (void)loadData;
 @end

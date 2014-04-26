@@ -23,13 +23,14 @@
     if (self) {
         // Custom initialization
     }
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.title = _list.listTitle;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddPlanListItem)];
 }
@@ -40,7 +41,6 @@
     itemsController.delegate = self;
     
     UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsController];
-    
     [self presentViewController:nav animated:YES completion:nil];
     
 }
