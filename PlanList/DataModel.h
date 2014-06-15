@@ -11,7 +11,6 @@
 @interface DataModel : NSObject
 @property(nonatomic, strong) NSMutableArray * lists;
 
-- (void)saveData;
-
-- (void)loadData;
+- (void)savePlanLists;
+- (void)setIndexOfSelectedPlanlist:(int)index;
 @end

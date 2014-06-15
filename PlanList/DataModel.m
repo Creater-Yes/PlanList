@@ -7,14 +7,15 @@
 //
 
 #import "DataModel.h"
+#import "PlanList.h"
 
 @implementation DataModel
 
 - (id)init
 {
     if (self = [super init]) {
-        self.lists = [NSMutableArray array];
-    
+        [self loadPlanLists];
+        [self registerDefaults];
     }
     
     return self;
@@ -33,22 +34,52 @@
     return [[self documentDirectory] stringByAppendingPathComponent:@"planlist.plist"];
 }
 
-- (void)saveData
+- (void)savePlanLists
 {
+    NSMutableData * data = [[NSMutableData alloc]init];
+    NSKeyedArchiver * archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:data];
+    [archiver encodeObject:self.lists forKey:@"Planlists"];
+    [archiver finishEncoding];
     
-    [self.lists writeToFile:[self dataFilePath] atomically:YES];
+    [data writeToFile:[self dataFilePath] atomically:YES];
 }
 
-- (void)loadData
+- (void)loadPlanLists
 {
     NSString * path = [self dataFilePath];
-    NSError * error = nil;
-    NSData * data = [NSData dataWithContentsOfFile:path options:NSDataReadingUncached error:&error];
-    
-    NSAssert(error == nil, @"error:%@", error);
-    NSLog(@"data:%@", data);
-    
-    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSData * data = [[NSData alloc]initWithContentsOfFile:path];
+        NSKeyedUnarchiver * unArchiver = [[NSKeyedUnarchiver alloc]initForReadingWithData:data];
+        self.lists = [unArchiver decodeObjectForKey:@"Planlists"];
+        [unArchiver finishDecoding];
+    } else {
+        self.lists = [[NSMutableArray alloc]initWithCapacity:20];
+    }
+}
+
+- (void)registerDefaults
+{
+    NSDictionary * dictionary = @{@"planlistIndex": @-1,
+                                  @"FirstTime" : @YES,
+                                  @"planlistItemID" : @0};
+    [[NSUserDefaults standardUserDefaults]registerDefaults:dictionary];
+}
+
+- (void)handleFirstTime
+{
+    BOOL firstTime = [[NSUserDefaults standardUserDefaults]boolForKey:@"FirstTime"];
+    if (firstTime) {
+        PlanList * planList = [[PlanList alloc]init];
+        planList.listTitle = @"List";
+        [self.lists addObject:planList];
+        [self setIndexOfSelectedPlanlist:0];
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"FirstTime"];
+    }
+}
+
+- (void)setIndexOfSelectedPlanlist:(int)index
+{
+    [[NSUserDefaults standardUserDefaults]setInteger: index forKey:@"planlistIndex"];
 }
 
 @end

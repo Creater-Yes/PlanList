@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4E61ECAE-75F6-4162-8BF1-5BEC3A4F1174</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PlanList</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>93FD098F-65E6-4066-BA78-893F4A6A841F</key>
+		<string>https://github.com/z0527z/PlanList.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>PlanList.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>93FD098F-65E6-4066-BA78-893F4A6A841F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/z0527z/PlanList.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>93FD098F-65E6-4066-BA78-893F4A6A841F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>93FD098F-65E6-4066-BA78-893F4A6A841F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>PlanList</string>
+		</dict>
+	</array>
+</dict>
+</plist>

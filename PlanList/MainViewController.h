@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class DataModel;
+#import "DataModel.h"
 
 @interface MainViewController : UITableViewController
 @property(nonatomic, strong) DataModel * data;

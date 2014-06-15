@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PlanListItem : NSObject
+@interface PlanListItem : NSObject<NSCoding>
 @property(nonatomic, copy) NSString * itemName;
 @property(nonatomic, assign) BOOL itemState;
 @property(nonatomic, assign) BOOL itemShoudRemind;

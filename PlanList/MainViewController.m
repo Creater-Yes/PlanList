@@ -7,7 +7,6 @@
 //
 
 #import "MainViewController.h"
-#import "DataModel.h"
 #import "PlanList.h"
 #import "ListsOfPlanListViewController.h"
 #import "PlanListItem.h"
@@ -29,42 +28,20 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     self.title = @"PlanList";
-    
-    // 修改返回按钮
-    /*
-    UIBarButtonItem * btnBack = [[UIBarButtonItem alloc]init];
-    btnBack.title = @"";
-    self.navigationController.navigationBar.backIndicatorImage = [UIImage imageNamed:@"back"];
-    self.navigationController.navigationBar.backIndicatorTransitionMaskImage = [UIImage imageNamed:@"black"];
-    self.navigationItem.backBarButtonItem = btnBack;
-    */
-    
-    /*
-    UIImage * image = [UIImage imageNamed:@"backBtn"];
-    [[UINavigationBar appearance] setBackIndicatorImage: image];
-    [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:image];
-    */
-    
-    /*
-    UIImage* image = [UIImage imageNamed:@"backBtn"];
-    UIBarButtonItem *item= [[UIBarButtonItem alloc] init];
-    [item setBackButtonBackgroundImage:[image resizableImageWithCapInsets:UIEdgeInsetsMake(0, image.size.width, 0, 0)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [item setBackButtonTitlePositionAdjustment:UIOffsetMake(-400.f, 0) forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.backBarButtonItem = item;
-    */
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
     self.navigationController.delegate = self;
-}
-
-- (void)backBarSelector:(UIBarButtonItem *)back
-{
-    NSLog(@"back:%@", back);
 }
 
 - (void)AddlistToPlanList
@@ -139,6 +116,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.data setIndexOfSelectedPlanlist:(int)indexPath.row];
     DetailListViewController * detailController = [[DetailListViewController alloc]initWithStyle:UITableViewStylePlain];
     detailController.list = [_data.lists objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:detailController animated:YES];
@@ -181,7 +159,7 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (viewController == self) {
-        [self.tableView reloadData];
+        
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PlanList : NSObject
+@interface PlanList : NSObject<NSCoding>
 @property(nonatomic, copy) NSString * listTitle;
 @property(nonatomic, copy) NSString * listIconName;
 @property(nonatomic, strong) NSMutableArray * items;
