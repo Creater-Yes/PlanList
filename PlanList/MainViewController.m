@@ -34,6 +34,19 @@
     [self.tableView reloadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.navigationController.delegate = self;
+    
+    int index = [self.data indexOfSelectedPlanlist];
+    NSLog(@"--idex:%d", index);
+    if (index >= 0 && index < [self.data.lists count]) {
+        [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow: index inSection:0]];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -41,7 +54,6 @@
     self.title = @"PlanList";
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
-    self.navigationController.delegate = self;
 }
 
 - (void)AddlistToPlanList
@@ -116,6 +128,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"didSelectRowAtIndexPath");
     [self.data setIndexOfSelectedPlanlist:(int)indexPath.row];
     DetailListViewController * detailController = [[DetailListViewController alloc]initWithStyle:UITableViewStylePlain];
     detailController.list = [_data.lists objectAtIndex:indexPath.row];
@@ -159,7 +172,7 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (viewController == self) {
-        
+        [self.data setIndexOfSelectedPlanlist:-1];
     }
 }
 

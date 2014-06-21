@@ -11,4 +11,5 @@
 
 @interface DetailListViewController : UITableViewController
 @property(nonatomic, strong) PlanList * list;
+
 @end

@@ -7,8 +7,17 @@
 //
 
 #import "PlanListItem.h"
+#import "DataModel.h"
 
 @implementation PlanListItem
+
+- (id)init
+{
+    if (self = [super init]) {
+        self.itemID = [DataModel nextPlanlistItemID];
+    }
+    return self;
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -17,6 +26,7 @@
         self.itemRemindDate = [aDecoder decodeObjectForKey:@"remindDate"];
         self.itemShoudRemind = [aDecoder decodeBoolForKey:@"shouldRemind"];
         self.itemState = [aDecoder decodeBoolForKey:@"itemState"];
+        self.itemID = [aDecoder decodeIntForKey:@"itemID"];
     }
     return self;
 }
@@ -27,6 +37,8 @@
     [aCoder encodeObject:_itemRemindDate forKey:@"remindDate"];
     [aCoder encodeBool:_itemShoudRemind forKey:@"shouldRemind"];
     [aCoder encodeBool:_itemState forKey:@"itemState"];
+    [aCoder encodeInt:_itemID forKey:@"itemID"];
 }
+
 
 @end

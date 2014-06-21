@@ -16,6 +16,8 @@
     if (self = [super init]) {
         [self loadPlanLists];
         [self registerDefaults];
+        [self handleFirstTime];
+        
     }
     
     return self;
@@ -55,6 +57,7 @@
     } else {
         self.lists = [[NSMutableArray alloc]initWithCapacity:20];
     }
+    NSLog(@"index:%d", [self indexOfSelectedPlanlist]);
 }
 
 - (void)registerDefaults
@@ -77,9 +80,23 @@
     }
 }
 
+- (int)indexOfSelectedPlanlist
+{
+    return (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"planlistIndex"];
+}
+
 - (void)setIndexOfSelectedPlanlist:(int)index
 {
     [[NSUserDefaults standardUserDefaults]setInteger: index forKey:@"planlistIndex"];
+}
+
++ (int)nextPlanlistItemID
+{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    int itemID = (int)[userDefaults integerForKey:@"planlistItemID"];
+    [userDefaults setInteger:itemID + 1 forKey:@"planlistItemID"];
+    [userDefaults synchronize];
+    return itemID;
 }
 
 @end

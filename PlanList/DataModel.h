@@ -12,5 +12,7 @@
 @property(nonatomic, strong) NSMutableArray * lists;
 
 - (void)savePlanLists;
+- (int)indexOfSelectedPlanlist;
 - (void)setIndexOfSelectedPlanlist:(int)index;
++ (int)nextPlanlistItemID;
 @end

@@ -13,4 +13,5 @@
 @property(nonatomic, assign) BOOL itemState;
 @property(nonatomic, assign) BOOL itemShoudRemind;
 @property(nonatomic, strong) NSDate * itemRemindDate;
+@property(nonatomic, assign) int itemID;
 @end
