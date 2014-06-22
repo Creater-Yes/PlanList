@@ -14,4 +14,6 @@
 @property(nonatomic, assign) BOOL itemShoudRemind;
 @property(nonatomic, strong) NSDate * itemRemindDate;
 @property(nonatomic, assign) int itemID;
+
+- (void)scheduleNotification;
 @end

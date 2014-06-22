@@ -45,6 +45,7 @@
     if (_item == nil) {
         self.title = @"Add Items";
         _issueDate = [NSDate date];
+        _shoudRemind = NO;
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else
@@ -65,6 +66,8 @@
         self.item.itemName = textField.text;
         self.item.itemShoudRemind = _shoudRemind;
         self.item.itemRemindDate = _issueDate;
+        self.item.itemState = NO;
+        [_item scheduleNotification];
         
         [self.delegate  ItemsController:self didFinishAddItem:_item];
     }
@@ -73,6 +76,7 @@
         self.item.itemShoudRemind = _shoudRemind;
         self.item.itemRemindDate = _issueDate;
         self.item.itemState = _isChecked;
+        [_item scheduleNotification];
         
         [self.delegate ItemsController:self didFinishEditItem:_item];
     }

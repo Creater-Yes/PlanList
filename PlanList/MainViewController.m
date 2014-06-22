@@ -41,7 +41,6 @@
     self.navigationController.delegate = self;
     
     int index = [self.data indexOfSelectedPlanlist];
-    NSLog(@"--idex:%d", index);
     if (index >= 0 && index < [self.data.lists count]) {
         [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow: index inSection:0]];
     }
