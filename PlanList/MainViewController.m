@@ -53,6 +53,12 @@
     self.title = @"PlanList";
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
+
+//    UIBarButtonItem * btnBack = [[UIBarButtonItem alloc]init];
+//    btnBack.title = @"";
+//    self.navigationController.navigationBar.backIndicatorImage = [UIImage imageNamed:@"backBtn"];
+//    self.navigationController.navigationBar.backIndicatorTransitionMaskImage = [UIImage imageNamed:@"backBtn"];
+//    self.navigationItem.backBarButtonItem = btnBack;
 }
 
 - (void)AddlistToPlanList

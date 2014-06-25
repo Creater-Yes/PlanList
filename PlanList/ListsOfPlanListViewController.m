@@ -47,7 +47,6 @@
         self.iconPicked = _list.listIconName;
     }
     
-    
 }
 
 #pragma mark - Target -- Action
