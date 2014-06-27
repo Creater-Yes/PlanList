@@ -11,20 +11,47 @@
 #import "ListsOfPlanListViewController.h"
 #import "PlanListItem.h"
 #import "DetailListViewController.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
+@implementation UISearchDisplayController (catlog)
 
-@interface MainViewController () <ListsOfPlanListViewControllerDelegate, UINavigationControllerDelegate>
+- (id)initWithSearchBar:(UISearchBar *)searchBar contentsControllerOfMy:(UIViewController *)viewController
+{
+    NSLog(@"------->init");
+    return [self initWithSearchBar:searchBar contentsController:viewController];
+}
 
+@end
+
+static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/admin/User/index";
+
+@interface MainViewController () <ListsOfPlanListViewControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDelegate, UITableViewDataSource>
+@property(nonatomic, strong)UITableView * tableView;
+@property(nonatomic, strong)UISearchBar * searchBar;
+@property(nonatomic, strong)UISearchDisplayController * searchDisplay;
+@property(nonatomic, strong)NSMutableArray * filterArray;
 @end
 
 @implementation MainViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+//- (id)initWithStyle:(UITableViewStyle)style
+//{
+//    self = [super initWithStyle:style];
+//    if (self) {
+//        self.data = [[DataModel alloc] init];
+//        self.filterArray = [NSMutableArray array];
+//    }
+//    return self;
+//}
+- (id)init
 {
-    self = [super initWithStyle:style];
-    if (self) {
+    if (self = [super init]) {
         self.data = [[DataModel alloc] init];
+        self.filterArray = [NSMutableArray array];
+        
+        self.title = @"PlanList";
     }
+    
     return self;
 }
 
@@ -46,12 +73,31 @@
     }
 }
 
+- (void)testNetworking
+{
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    NSURL * url = [NSURL URLWithString:baseURLString];
+    NSURLRequest * request = [NSURLRequest requestWithURL:url];
+    
+    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@", (NSArray *)responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@", [error localizedDescription]);
+        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"获取信息错误" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    [operation start];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.title = @"PlanList";
-
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(AddlistToPlanList)];
 
 //    UIBarButtonItem * btnBack = [[UIBarButtonItem alloc]init];
@@ -59,7 +105,34 @@
 //    self.navigationController.navigationBar.backIndicatorImage = [UIImage imageNamed:@"backBtn"];
 //    self.navigationController.navigationBar.backIndicatorTransitionMaskImage = [UIImage imageNamed:@"backBtn"];
 //    self.navigationItem.backBarButtonItem = btnBack;
+    
+    self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:_tableView];
+    
+    // 手动设置搜索条
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectZero];
+    self.searchBar.showsScopeBar = NO;
+    [self.searchBar sizeToFit];
+    self.searchBar.placeholder = @"请输入要搜素的内容";
+    self.searchBar.scopeButtonTitles = @[@"All", @"Drinks", @"Folder", @"Trips"];
+    self.searchBar.delegate = self;
+    self.tableView.tableHeaderView = _searchBar;
+    
+    UISearchDisplayController * searchDisplay = [[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self];
+    searchDisplay.delegate = self;
+    searchDisplay.searchResultsDelegate = self;
+    searchDisplay.searchResultsDataSource = self;
+    self.searchDisplay = searchDisplay;
+    
+    // 搜素栏初始隐藏
+    self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(_searchBar.bounds));
+    
+    //[self testNetworking];
+    NSLog(@"searchDisplay:%@, searchController:%@", _searchDisplay, self.searchDisplayController);
 }
+
 
 - (void)AddlistToPlanList
 {
@@ -76,6 +149,47 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)filterContentForSearchText:(NSString *)searchText scope:(NSString *)scope
+{
+    // 根据搜索栏的内容和范围更新过滤后的数组。
+    // 先将过滤后的数组清空
+    [self.filterArray removeAllObjects];
+    
+    // 用 NSPredicate 来过滤数组
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"SELF.listTitle contains[c] %@", searchText];
+    NSArray * tempArray = [_data.lists filteredArrayUsingPredicate: predicate];
+    if (![scope isEqual:@"All"]) {
+        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"SELF.listIconName contains[c] %@", scope];
+        tempArray = [tempArray filteredArrayUsingPredicate: predicate];
+    }
+    
+    _filterArray = [tempArray mutableCopy];
+}
+
+#pragma - UISearchBar Delegate
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+{
+    [self filterContentForSearchText:self.searchDisplayController.searchBar.text
+                               scope:[self.searchDisplayController.searchBar.scopeButtonTitles objectAtIndex:searchOption]];
+    
+    return YES;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString
+                               scope:[self.searchDisplayController.searchBar.scopeButtonTitles objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    
+    return YES;
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    NSLog(@"searchDisplayControllerWillBeginSearch:%@", controller);
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -85,7 +199,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.lists.count;
+    int count;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        count = (int)_filterArray.count;
+    }
+    else{
+        count = (int)_data.lists.count;
+    }
+    
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -96,7 +218,15 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    PlanList * list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
+    
+    PlanList * list;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        list = (PlanList *)([_filterArray objectAtIndex:indexPath.row]);
+    }
+    else{
+        list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
+    }
+    
     cell.imageView.image = [UIImage imageNamed: list.listIconName];
     cell.textLabel.text = list.listTitle;
     
@@ -136,7 +266,12 @@
     NSLog(@"didSelectRowAtIndexPath");
     [self.data setIndexOfSelectedPlanlist:(int)indexPath.row];
     DetailListViewController * detailController = [[DetailListViewController alloc]initWithStyle:UITableViewStylePlain];
-    detailController.list = [_data.lists objectAtIndex:indexPath.row];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        detailController.list = [_filterArray objectAtIndex:indexPath.row];
+    }
+    else{
+        detailController.list = [_data.lists objectAtIndex:indexPath.row];
+    }
     [self.navigationController pushViewController:detailController animated:YES];
     
 }
