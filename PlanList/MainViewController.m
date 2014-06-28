@@ -14,7 +14,7 @@
 #import "AFNetworkActivityIndicatorManager.h"
 
 
-static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/admin/User/index";
+static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/weather_sample/";
 
 @interface MainViewController () <ListsOfPlanListViewControllerDelegate, UINavigationControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDelegate, UITableViewDataSource>
 @property(nonatomic, strong)UITableView * tableView;
@@ -58,22 +58,40 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
 
 - (void)testNetworking
 {
-    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
-    NSURL * url = [NSURL URLWithString:baseURLString];
-    NSURLRequest * request = [NSURLRequest requestWithURL:url];
+    if ([[UIDevice currentDevice] systemVersion].floatValue >= 7.0) {
+        NSURLSessionConfiguration * configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURL * URL = [NSURL URLWithString:baseURLString];
+        NSDictionary * parameters = @{@"format": @"json"};
+        AFHTTPSessionManager * manager = [[AFHTTPSessionManager alloc]initWithBaseURL:URL sessionConfiguration:configuration];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        [manager GET:@"weather.php" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"%@", (NSArray *)responseObject);
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"%@", [error localizedDescription]);
+            UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"获取信息错误" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alertView show];
+        }];
     
-    AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"%@", (NSArray *)responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@", [error localizedDescription]);
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"获取信息错误" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    [operation start];
+    }
+    else{
+        [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+        NSURL * url = [NSURL URLWithString:baseURLString];
+        NSURLRequest * request = [NSURLRequest requestWithURL:url];
+
+        AFHTTPRequestOperation * operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
+        operation.responseSerializer = [AFJSONResponseSerializer serializer];
+
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"%@", (NSArray *)responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"%@", [error localizedDescription]);
+            UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"获取信息错误" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alertView show];
+        }];
+        
+        [operation start];
+    }
+
     
 }
 
@@ -112,7 +130,7 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
     // 搜素栏初始隐藏
     self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(_searchBar.bounds));
     
-    //[self testNetworking];
+    [self testNetworking];
     NSLog(@"searchDisplay:%@, searchController:%@", _searchDisplay, self.searchDisplayController);
 }
 
