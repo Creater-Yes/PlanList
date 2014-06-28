@@ -82,7 +82,7 @@
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
     
-    PlanListItem * item = [_list.items objectAtIndex:indexPath.row];
+    PlanListItem * item = _list.items[indexPath.row];
     
     label = (UILabel *)[cell.contentView viewWithTag:1050];
     label.text = item.itemState ? @"√" : @"";
@@ -97,7 +97,7 @@
 {
     ItemsInDetailListViewController * itemsController = [[ItemsInDetailListViewController alloc]initWithStyle:UITableViewStyleGrouped];
     itemsController.delegate = self;
-    itemsController.item = [_list.items objectAtIndex:indexPath.row];
+    itemsController.item = _list.items[indexPath.row];
     
     UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:itemsController];
     
@@ -107,7 +107,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    PlanListItem * item = [_list.items objectAtIndex:indexPath.row];
+    PlanListItem * item = _list.items[indexPath.row];
     item.itemState = !item.itemState;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -132,7 +132,6 @@
 - (void)ItemsController:(ItemsInDetailListViewController *)controller didFinishEditItem:(PlanListItem *)item
 {
     NSInteger index = [_list.items indexOfObject:item];
-    //[self.list.items replaceObjectAtIndex:index withObject:item];
     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];

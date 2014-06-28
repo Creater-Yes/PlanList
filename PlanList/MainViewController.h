@@ -14,7 +14,3 @@
 @property(nonatomic, strong) DataModel * data;
 @end
 
-
-@interface UISearchDisplayController (catlog)
-- (id)initWithSearchBar:(UISearchBar *)searchBar contentsControllerOfMy:(UIViewController *)viewController;
-@end

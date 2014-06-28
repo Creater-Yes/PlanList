@@ -13,15 +13,6 @@
 #import "DetailListViewController.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
-@implementation UISearchDisplayController (catlog)
-
-- (id)initWithSearchBar:(UISearchBar *)searchBar contentsControllerOfMy:(UIViewController *)viewController
-{
-    NSLog(@"------->init");
-    return [self initWithSearchBar:searchBar contentsController:viewController];
-}
-
-@end
 
 static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/admin/User/index";
 
@@ -34,15 +25,7 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
 
 @implementation MainViewController
 
-//- (id)initWithStyle:(UITableViewStyle)style
-//{
-//    self = [super initWithStyle:style];
-//    if (self) {
-//        self.data = [[DataModel alloc] init];
-//        self.filterArray = [NSMutableArray array];
-//    }
-//    return self;
-//}
+
 - (id)init
 {
     if (self = [super init]) {
@@ -170,17 +153,17 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
+
     [self filterContentForSearchText:self.searchDisplayController.searchBar.text
-                               scope:[self.searchDisplayController.searchBar.scopeButtonTitles objectAtIndex:searchOption]];
-    
+                               scope:self.searchDisplayController.searchBar.scopeButtonTitles[searchOption]];
     return YES;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+
     [self filterContentForSearchText:searchString
-                               scope:[self.searchDisplayController.searchBar.scopeButtonTitles objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    
+                               scope:self.searchDisplayController.searchBar.scopeButtonTitles[self.searchDisplayController.searchBar.selectedScopeButtonIndex]];
     return YES;
 }
 
@@ -221,10 +204,10 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
     
     PlanList * list;
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        list = (PlanList *)([_filterArray objectAtIndex:indexPath.row]);
+        list = (PlanList *)(_filterArray[indexPath.row]);
     }
     else{
-        list = (PlanList *)([_data.lists objectAtIndex:indexPath.row]);
+        list = (PlanList *)(_data.lists[indexPath.row]);
     }
     
     cell.imageView.image = [UIImage imageNamed: list.listIconName];
@@ -254,7 +237,7 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
 {
     ListsOfPlanListViewController * listsController = [[ListsOfPlanListViewController alloc]initWithStyle:UITableViewStyleGrouped];
     listsController.delegate = self;
-    listsController.list = [_data.lists objectAtIndex:indexPath.row];
+    listsController.list = _data.lists[indexPath.row];
     
     UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:listsController];
     
@@ -267,10 +250,10 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
     [self.data setIndexOfSelectedPlanlist:(int)indexPath.row];
     DetailListViewController * detailController = [[DetailListViewController alloc]initWithStyle:UITableViewStylePlain];
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        detailController.list = [_filterArray objectAtIndex:indexPath.row];
+        detailController.list = _filterArray[indexPath.row];
     }
     else{
-        detailController.list = [_data.lists objectAtIndex:indexPath.row];
+        detailController.list = _data.lists[indexPath.row];
     }
     [self.navigationController pushViewController:detailController animated:YES];
     
@@ -295,8 +278,9 @@ static NSString * const baseURLString = @"http://192.168.1.102/app/index.php/adm
 
 - (void)ListsOfPlanListController:(ListsOfPlanListViewController *)controller didFinishEditPlanList:(PlanList *)list
 {
-    NSInteger index = [self.data.lists indexOfObject:list];
-    [self.data.lists replaceObjectAtIndex:index withObject:list];
+    NSInteger index = [_data.lists indexOfObject:list];
+    //[self.data.lists replaceObjectAtIndex:index withObject:list];
+    _data.lists[index] = list;
     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
