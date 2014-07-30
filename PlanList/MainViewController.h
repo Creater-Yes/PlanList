@@ -14,3 +14,8 @@
 @property(nonatomic, strong) DataModel * data;
 @end
 
+
+@interface MainViewControllerTableCell : UITableViewCell
+@property(nonatomic, assign) BOOL isLineBreak;
+@property(nonatomic, strong) UIImageView * lineImage;
+@end

@@ -61,6 +61,7 @@
 		227653BC195DA8EF0040D313 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 227653A9195DA8EF0040D313 /* UIProgressView+AFNetworking.m */; };
 		227653BD195DA8EF0040D313 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 227653AB195DA8EF0040D313 /* UIRefreshControl+AFNetworking.m */; };
 		227653BE195DA8EF0040D313 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 227653AD195DA8EF0040D313 /* UIWebView+AFNetworking.m */; };
+		229DB5BE1988952B006A00D5 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = 229DB5BD1988952B006A00D5 /* line.png */; };
 		22F2DA6A18D6F2030028446C /* Drinks.png in Resources */ = {isa = PBXBuildFile; fileRef = 22F2DA6918D6F2030028446C /* Drinks.png */; };
 		22F2DA6C18D6F3000028446C /* i_arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 22F2DA6B18D6F3000028446C /* i_arrow_left@2x.png */; };
 		22F2DA7018D708400028446C /* backBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 22F2DA6F18D708400028446C /* backBtn.png */; };
@@ -164,6 +165,7 @@
 		227653AB195DA8EF0040D313 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		227653AC195DA8EF0040D313 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		227653AD195DA8EF0040D313 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		229DB5BD1988952B006A00D5 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line.png; sourceTree = "<group>"; };
 		22F2DA6918D6F2030028446C /* Drinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Drinks.png; sourceTree = "<group>"; };
 		22F2DA6B18D6F3000028446C /* i_arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "i_arrow_left@2x.png"; sourceTree = "<group>"; };
 		22F2DA6F18D708400028446C /* backBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backBtn.png; path = ../backBtn.png; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 		2263CE4E18D0AF69004A6F5E /* Checklist Icons */ = {
 			isa = PBXGroup;
 			children = (
+				229DB5BD1988952B006A00D5 /* line.png */,
 				22F2DA7118D7142E0028446C /* white.png */,
 				22F2DA7318D715B50028446C /* black.png */,
 				22F2DA6F18D708400028446C /* backBtn.png */,
@@ -423,6 +426,7 @@
 			files = (
 				2263CE6518D0AF69004A6F5E /* Birthdays.png in Resources */,
 				2263CE7218D0AF69004A6F5E /* No Icon@2x.png in Resources */,
+				229DB5BE1988952B006A00D5 /* line.png in Resources */,
 				2263CE1818D05FD8004A6F5E /* InfoPlist.strings in Resources */,
 				2263CE7318D0AF69004A6F5E /* Photos.png in Resources */,
 				2263CE6F18D0AF69004A6F5E /* Inbox.png in Resources */,

@@ -13,6 +13,26 @@
 #import "DetailListViewController.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
+@implementation MainViewControllerTableCell
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.isLineBreak = YES;
+        
+        self.lineImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"line.png"]];
+        _lineImage.frame = CGRectMake(20, 0, 320 - 40, 44);
+        [self addSubview:_lineImage];
+        
+        NSLog(@"cell alloc");
+    }
+    
+    return  self;
+}
+
+@end
+
+/* ------------------------------------------------------------------------------ */
 
 static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/weather_sample/";
 
@@ -95,6 +115,37 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
     
 }
 
+#pragma - 手势处理, 右划添加删除线
+/*
+ * 1> 也可用绘图实现，需自定义tableView，重写其 DrawRect: 方法，在里面去计算具体该画在哪一行
+ * 2> 使用cell中添加图片来实现时，应该自定义cell，删除线图片作为其内部属性，否则会出现重复添加
+ */
+- (void)swipeAtCell:(UISwipeGestureRecognizer *)gesture
+{
+    CGPoint point = [gesture locationInView:_tableView];
+    NSLog(@"point<%.f, %.f>", point.x, point.y);
+    
+    NSIndexPath * indexPath = [self.tableView indexPathForRowAtPoint:point];
+    NSLog(@"row:%zd", indexPath.row);
+    
+    MainViewControllerTableCell * cell = (MainViewControllerTableCell *)[_tableView cellForRowAtIndexPath:indexPath];
+    
+    
+    BOOL result = cell.isLineBreak;
+    cell.isLineBreak = !result;
+    NSLog(@"cell:%p, result:%d, islineBreak:%d", cell, result, cell.isLineBreak);
+    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+}
+
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+{
+    NSLog(@"drawLayer-->");
+    CGContextMoveToPoint(ctx, 50, 50);
+    CGContextAddLineToPoint(ctx, 200, 200);
+    CGContextDrawPath(ctx, kCGPathStroke);
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -111,6 +162,12 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    
+    // 手势处理
+    UISwipeGestureRecognizer * swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAtCell:)];
+    swipe.numberOfTouchesRequired = 1;
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.tableView addGestureRecognizer:swipe];
     
     // 手动设置搜索条
     self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectZero];
@@ -130,8 +187,15 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
     // 搜素栏初始隐藏
     self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(_searchBar.bounds));
     
-    [self testNetworking];
+    //[self testNetworking];
     NSLog(@"searchDisplay:%@, searchController:%@", _searchDisplay, self.searchDisplayController);
+    
+    CALayer * layer = [CALayer layer];
+    layer.bounds = self.view.bounds;
+    layer.position = CGPointZero;
+    layer.delegate = self;
+    [layer setNeedsDisplay];
+    [self.view.layer addSublayer:layer];
 }
 
 
@@ -198,6 +262,11 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
     return 1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     int count;
@@ -214,9 +283,10 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *Identifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
+    MainViewControllerTableCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
+        cell = [[MainViewControllerTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
+        
     }
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     
@@ -247,6 +317,9 @@ static NSString * const baseURLString = @"http://www.raywenderlich.com/demos/wea
     else{
         cell.detailTextLabel.text = [NSString stringWithFormat:@"(%d need to do)", count];
     }
+    
+    NSLog(@"cell:%p, cell->islineBreak:%d", cell, cell.isLineBreak);
+    [cell.lineImage setHidden:cell.isLineBreak];
     
     return cell;
 }
